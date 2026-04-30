@@ -1,0 +1,74 @@
+:root {
+    --ui-cyan: #00f2ff;
+}
+
+body,
+html {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Arial Black', sans-serif;
+}
+
+.scroll-section {
+    position: relative;
+    width: 100%;
+    height: 300vh;
+    background: #000;
+}
+
+canvas {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.ui-overlay {
+    position: sticky;
+    top: 20%;
+    z-index: 10;
+    padding-left: 5vw;
+    pointer-events: none;
+}
+
+.giant-bold {
+    font-size: clamp(4rem, 10vw, 8.5rem);
+    font-weight: 900;
+    line-height: 0.8;
+    margin: 0;
+    letter-spacing: -6px;
+    text-transform: uppercase;
+}
+
+.cyan-text {
+    color: var(--ui-cyan);
+    text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+}
+
+.stark-quote {
+    font-family: 'Courier New', monospace;
+    max-width: 500px;
+    margin-top: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+.stark-footer {
+    background: #080808;
+    padding: 100px 5vw;
+    border-top: 1px solid var(--ui-cyan);
+}
+
+.scanline {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 242, 255, 0.02) 50%, transparent 50%);
+    background-size: 100% 4px;
+    z-index: 100;
+    pointer-events: none;
+}
