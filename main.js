@@ -1,3 +1,9 @@
+/* ============================================
+   STARK OS — OLAMIDE
+   main.js — Canvas scroll, quote switching,
+   frame counter, progress bars
+   ============================================ */
+
 const totalFrames = 169;
 
 const canvas1 = document.getElementById('canvas-1');
@@ -9,27 +15,29 @@ const images1 = [];
 const images2 = [];
 
 let loadedCount = 0;
-const totalToLoad = totalFrames * 2; // Loading for 2 sections
+const totalToLoad = totalFrames * 2;
 
+// ---- RESIZE ----
 function resize() {
     canvas1.width = canvas2.width = window.innerWidth;
     canvas1.height = canvas2.height = window.innerHeight;
 }
 
+// ---- PRELOAD ----
 function preload() {
     const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const loadFramesEl = document.getElementById('load-frames');
 
     for (let i = 1; i <= totalFrames; i++) {
         const frame = i.toString().padStart(4, '0');
 
-        // Frame set 1
         const img1 = new Image();
         img1.src = `./frames/frame_${frame}.jpg`;
         img1.onload = () => handleLoad();
-        img1.onerror = () => handleLoad(); // Don't get stuck on missing files
+        img1.onerror = () => handleLoad();
         images1.push(img1);
 
-        // Frame set 2
         const img2 = new Image();
         img2.src = `./frames2/frame_${frame}.jpg`;
         img2.onload = () => handleLoad();
@@ -39,29 +47,95 @@ function preload() {
 
     function handleLoad() {
         loadedCount++;
-        const percent = (loadedCount / totalToLoad) * 100;
+        const percent = Math.round((loadedCount / totalToLoad) * 100);
         progressFill.style.width = `${percent}%`;
+        progressText.textContent = `${percent}%`;
+        if (loadFramesEl) loadFramesEl.textContent = `FRAMES: ${loadedCount} / ${totalToLoad}`;
 
         if (loadedCount >= totalToLoad) {
-            document.getElementById('loading-screen').classList.add('fade-out');
-            handleScroll(); // Initial draw
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('fade-out');
+                handleScroll();
+            }, 400);
         }
     }
 }
 
+// ---- DRAW IMAGE COVER ----
 function drawImageCover(ctx, img, canvas) {
-    if (!img.complete) return;
-    const hRatio = canvas.width / img.width;
-    const vRatio = canvas.height / img.height;
+    if (!img || !img.complete || !img.naturalWidth) return;
+    const hRatio = canvas.width / img.naturalWidth;
+    const vRatio = canvas.height / img.naturalHeight;
     const ratio = Math.max(hRatio, vRatio);
-    const centerShift_x = (canvas.width - img.width * ratio) / 2;
-    const centerShift_y = (canvas.height - img.height * ratio) / 2;
-
+    const cx = (canvas.width - img.naturalWidth * ratio) / 2;
+    const cy = (canvas.height - img.naturalHeight * ratio) / 2;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, img.width, img.height,
-        centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+    ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight,
+        cx, cy, img.naturalWidth * ratio, img.naturalHeight * ratio);
 }
 
+// ---- UPDATE QUOTES ----
+function updateQuotes(containerId, currentFrame) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const items = container.querySelectorAll('.quote-item');
+    items.forEach(item => {
+        const start = parseInt(item.getAttribute('data-frame-start'));
+        const end = parseInt(item.getAttribute('data-frame-end'));
+        if (currentFrame >= start && currentFrame <= end) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+// ---- UPDATE FRAME COUNTER ----
+function updateFrameCounter(numElId, frameIndex) {
+    const el = document.getElementById(numElId);
+    if (el) {
+        el.textContent = String(frameIndex + 1).padStart(3, '0');
+    }
+}
+
+// ---- UPDATE SECTION PROGRESS BAR ----
+function updateSectionProgress(fillId, percentId, progress) {
+    const fill = document.getElementById(fillId);
+    const pct = document.getElementById(percentId);
+    const p = Math.round(progress * 100);
+    if (fill) fill.style.width = `${p}%`;
+    if (pct) pct.textContent = `${p}%`;
+}
+
+// ---- SECTION 2: SHOW/HIDE FIXED OVERLAY + SWAP TEXT AT FRAME 90 ----
+let stateB_active = false;
+const overlayRight = document.getElementById('overlay-right');
+const stateA = document.getElementById('state-a');
+const stateB = document.getElementById('state-b');
+
+function updateSection2State(frameIndex, section2InView) {
+    if (!overlayRight || !stateA || !stateB) return;
+
+    // Show/hide entire overlay based on whether section 2 is in viewport
+    if (section2InView) {
+        overlayRight.classList.add('visible');
+    } else {
+        overlayRight.classList.remove('visible');
+    }
+
+    // Swap states at frame 90 (index 89)
+    if (frameIndex >= 89 && !stateB_active) {
+        stateB_active = true;
+        stateA.classList.add('hidden');
+        stateB.classList.add('visible');
+    } else if (frameIndex < 89 && stateB_active) {
+        stateB_active = false;
+        stateA.classList.remove('hidden');
+        stateB.classList.remove('visible');
+    }
+}
+
+// ---- MAIN SCROLL HANDLER ----
 function handleScroll() {
     const sections = document.querySelectorAll('.scroll-section');
 
@@ -72,25 +146,43 @@ function handleScroll() {
         let progress = -rect.top / (sectionHeight - window.innerHeight);
         progress = Math.max(0, Math.min(1, progress));
 
-        const frameIndex = Math.floor(progress * (totalFrames - 1));
-        const overlay = section.querySelector('.ui-overlay');
-
-        if (overlay) {
-            const scale = 1 + (progress * 0.1);
-            const opacity = progress > 0.9 ? (1 - progress) * 10 : 1;
-            overlay.style.transform = `scale(${scale})`;
-            overlay.style.opacity = opacity;
-        }
+        const frameIndex = Math.min(
+            Math.floor(progress * (totalFrames - 1)),
+            totalFrames - 1
+        );
 
         if (index === 0) {
+            const inView = progress > 0 && progress < 1;
+            const ql = document.getElementById('quotes-left-1');
+            if (ql) ql.classList.toggle('visible', inView);
             if (images1[frameIndex]) drawImageCover(ctx1, images1[frameIndex], canvas1);
+            updateFrameCounter('fc-num-1', frameIndex);
+            updateQuotes('quotes-left-1', frameIndex);
+            updateSectionProgress('sp-fill-1', 'sp-percent-1', progress);
         } else {
+            const inView = progress > 0 && progress < 1;
+            const ql = document.getElementById('quotes-left-2');
+            if (ql) ql.classList.toggle('visible', inView);
+            // Draw canvas
             if (images2[frameIndex]) drawImageCover(ctx2, images2[frameIndex], canvas2);
+            // Update counter
+            updateFrameCounter('fc-num-2', frameIndex);
+            // Update quotes
+            updateQuotes('quotes-left-2', frameIndex);
+            // Update progress bar
+            updateSectionProgress('sp-fill-2', 'sp-percent-2', progress);
+            // Update right text based on frame + visibility
+            updateSection2State(frameIndex, inView);
         }
     });
 }
 
-window.addEventListener('resize', resize);
+// ---- INIT ----
+window.addEventListener('resize', () => {
+    resize();
+    handleScroll();
+});
+
 window.addEventListener('scroll', () => requestAnimationFrame(handleScroll));
 
 resize();

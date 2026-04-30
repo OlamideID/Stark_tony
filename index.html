@@ -4,16 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STARK // OS</title>
+    <title>Olamide — Built different.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Simple Loader -->
+
     <div id="loading-screen">
-        <h1 class="cyan-text">INITIALIZING...</h1>
-        <div class="progress-bar">
-            <div id="progress-fill"></div>
+        <div class="loader-inner">
+            <div class="loader-badge">STARK INDUSTRIES // SYSTEM BOOT</div>
+            <h1 class="loader-title">J.A.R.V.I.S.</h1>
+            <p class="loader-sub">INITIALIZING OLAMIDE INTERFACE...</p>
+            <div class="progress-bar">
+                <div id="progress-fill"></div>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="loader-stats">
+                <span id="load-frames">FRAMES: 0 / 338</span>
+                <span class="dot-sep">●</span>
+                <span>ARC REACTOR: ONLINE</span>
+            </div>
         </div>
     </div>
 
@@ -21,30 +36,227 @@
 
     <div id="trigger-1" class="scroll-section">
         <canvas id="canvas-1"></canvas>
-        <div class="ui-overlay">
-            <h1 class="giant-bold">I AM<br>OLAMIDE.</h1>
-            <p class="stark-quote"><b>"THINGS ARE DIFFERENT NOW. I HAVE TO PROTECT THE ONE THING I CAN'T LIVE
-                    WITHOUT."</b></p>
+
+        <div class="frame-counter" id="counter-1">
+            <span class="fc-label">FRAME</span>
+            <span class="fc-num" id="fc-num-1">001</span>
+            <span class="fc-sep">/</span>
+            <span class="fc-total">169</span>
+        </div>
+
+        <div class="quotes-left" id="quotes-left-1">
+            <div class="quote-item active" data-frame-start="0" data-frame-end="28">
+                <p class="q-text">"Part of the journey is the end."</p>
+                <span class="q-film">— AVENGERS: ENDGAME</span>
+            </div>
+            <div class="quote-item" data-frame-start="29" data-frame-end="56">
+                <p class="q-text">"I am Iron Man."</p>
+                <span class="q-film">— IRON MAN (2008)</span>
+            </div>
+            <div class="quote-item" data-frame-start="57" data-frame-end="84">
+                <p class="q-text">"Genius, billionaire, playboy, philanthropist."</p>
+                <span class="q-film">— THE AVENGERS (2012)</span>
+            </div>
+            <div class="quote-item" data-frame-start="85" data-frame-end="112">
+                <p class="q-text">"If we can't protect the earth, you can be damn sure we'll avenge it."</p>
+                <span class="q-film">— THE AVENGERS (2012)</span>
+            </div>
+            <div class="quote-item" data-frame-start="113" data-frame-end="140">
+                <p class="q-text">"I'm not the one who needs to watch his back."</p>
+                <span class="q-film">— IRON MAN 2 (2010)</span>
+            </div>
+            <div class="quote-item" data-frame-start="141" data-frame-end="169">
+                <p class="q-text">"I love you 3000."</p>
+                <span class="q-film">— AVENGERS: ENDGAME</span>
+            </div>
+        </div>
+
+        <div class="section-progress-wrap">
+            <div class="sp-label">
+                <span>SEQUENCE 01 // ORIGIN</span>
+                <span id="sp-percent-1">0%</span>
+            </div>
+            <div class="section-progress-bar">
+                <div class="sp-fill" id="sp-fill-1"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-band">
+        <div class="stat-item">
+            <span class="s-num">3000</span>
+            <span class="s-label">TIMES LOVED</span>
+        </div>
+        <div class="stat-divider">●</div>
+        <div class="stat-item">
+            <span class="s-num">∞</span>
+            <span class="s-label">SUITS BUILT</span>
+        </div>
+        <div class="stat-divider">●</div>
+        <div class="stat-item">
+            <span class="s-num">1</span>
+            <span class="s-label">SNAP TO END IT ALL</span>
+        </div>
+        <div class="stat-divider">●</div>
+        <div class="stat-item">
+            <span class="s-num">14,000,605</span>
+            <span class="s-label">FUTURES SEEN</span>
         </div>
     </div>
 
     <div id="trigger-2" class="scroll-section">
         <canvas id="canvas-2"></canvas>
-        <div class="ui-overlay">
-            <h1 class="giant-bold cyan-text">BUILD WITH<br>OLAMIDE</h1>
-            <p class="stark-quote"><b>"PART OF THE JOURNEY IS THE END."</b></p>
+
+        <div class="frame-counter" id="counter-2">
+            <span class="fc-label">FRAME</span>
+            <span class="fc-num" id="fc-num-2">001</span>
+            <span class="fc-sep">/</span>
+            <span class="fc-total">169</span>
+        </div>
+
+        <div class="quotes-left" id="quotes-left-2">
+            <div class="quote-item active" data-frame-start="0" data-frame-end="22">
+                <p class="q-text">"No amount of money ever bought a second of time."</p>
+                <span class="q-film">— AVENGERS: ENDGAME</span>
+            </div>
+            <div class="quote-item" data-frame-start="23" data-frame-end="44">
+                <p class="q-text">"We need a plan of attack."</p>
+                <span class="q-film">— THE AVENGERS (2012)</span>
+            </div>
+            <div class="quote-item" data-frame-start="45" data-frame-end="66">
+                <p class="q-text">"Heroes? There is no such thing."</p>
+                <span class="q-film">— IRON MAN 3 (2013)</span>
+            </div>
+            <div class="quote-item" data-frame-start="67" data-frame-end="88">
+                <p class="q-text">"I'm made of hot lead, pal."</p>
+                <span class="q-film">— IRON MAN 2 (2010)</span>
+            </div>
+            <div class="quote-item" data-frame-start="89" data-frame-end="110">
+                <p class="q-text">"I am inevitable."</p>
+                <span class="q-film">— AVENGERS: ENDGAME</span>
+            </div>
+            <div class="quote-item" data-frame-start="111" data-frame-end="130">
+                <p class="q-text">"And I am Iron Man."</p>
+                <span class="q-film">— AVENGERS: ENDGAME</span>
+            </div>
+            <div class="quote-item" data-frame-start="131" data-frame-end="169">
+                <p class="q-text">"Proof that Tony Stark has a heart."</p>
+                <span class="q-film">— PEPPER POTTS // IRON MAN (2008)</span>
+            </div>
+        </div>
+
+        <div class="ui-overlay-right" id="overlay-right">
+
+            <div class="right-state" id="state-a">
+                <div class="badge-line">
+                    <span class="badge-dot badge-dot--red"></span>
+                    <span class="badge-text">TITAN II // FINAL FRAME</span>
+                </div>
+                <h1 class="giant-bold right-aligned">
+                    <span class="white-text">I am</span><br>
+                    <span class="gold-text">Inevitable.</span>
+                </h1>
+                <p class="right-desc">Endgame — the snap heard across the universe. J.A.R.V.I.S. held the last frame so
+                    we could rebuild from it.</p>
+            </div>
+
+            <div class="right-state" id="state-b">
+                <div class="badge-line">
+                    <span class="badge-dot badge-dot--gold"></span>
+                    <span class="badge-text">ENDGAME // FINAL FRAME</span>
+                </div>
+                <h1 class="giant-bold right-aligned">
+                    <span class="white-text">And I am</span><br>
+                    <span class="gold-text">Iron Man.</span>
+                </h1>
+                <p class="right-desc">Endgame — the snap heard across the universe. J.A.R.V.I.S. held the last frame so
+                    we could rebuild from it.</p>
+            </div>
+
+        </div>
+
+        <div class="section-progress-wrap">
+            <div class="sp-label">
+                <span>SEQUENCE 02 // ENDGAME</span>
+                <span id="sp-percent-2">0%</span>
+            </div>
+            <div class="section-progress-bar">
+                <div class="sp-fill sp-fill--gold" id="sp-fill-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="quote-wall">
+        <div class="qw-inner">
+            <p class="qw-large">"Whatever happens tomorrow, you must promise me one thing. That you will stay who you
+                are. Not a perfect soldier, but a good man."</p>
+            <span class="qw-attr">— DR. ERSKINE // CAPTAIN AMERICA (2011)</span>
+        </div>
+        <div class="qw-ticker">
+            <div class="ticker-track">
+                <span>IRON MAN</span><span class="sep">●</span>
+                <span>AVENGERS</span><span class="sep">●</span>
+                <span>INFINITY WAR</span><span class="sep">●</span>
+                <span>ENDGAME</span><span class="sep">●</span>
+                <span>STARK INDUSTRIES</span><span class="sep">●</span>
+                <span>ARC REACTOR</span><span class="sep">●</span>
+                <span>J.A.R.V.I.S.</span><span class="sep">●</span>
+                <span>OLAMIDE</span><span class="sep">●</span>
+                <span>IRON MAN</span><span class="sep">●</span>
+                <span>AVENGERS</span><span class="sep">●</span>
+                <span>INFINITY WAR</span><span class="sep">●</span>
+                <span>ENDGAME</span><span class="sep">●</span>
+                <span>STARK INDUSTRIES</span><span class="sep">●</span>
+                <span>ARC REACTOR</span><span class="sep">●</span>
+                <span>J.A.R.V.I.S.</span><span class="sep">●</span>
+                <span>OLAMIDE</span><span class="sep">●</span>
+            </div>
         </div>
     </div>
 
     <footer class="stark-footer">
+        <div class="footer-top">
+            <div class="footer-logo">
+                <span class="fl-big">STARK</span>
+                <span class="fl-sub">// INDUSTRIES</span>
+            </div>
+            <div class="footer-nav">
+                <a href="#" class="fn-link">PROJECTS</a>
+                <a href="#" class="fn-link">CONTACT</a>
+                <a href="#" class="fn-link">RESUME</a>
+                <a href="#" class="fn-link">GITHUB</a>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
         <div class="footer-grid">
             <div class="grid-item">
                 <span class="label">STATUS</span>
-                <p class="status-ok">SYSTEMS NOMINAL</p>
+                <p class="status-ok">● SYSTEMS NOMINAL</p>
             </div>
             <div class="grid-item">
                 <span class="label">LOCATION</span>
                 <p>NIGERIA // HQ</p>
+            </div>
+            <div class="grid-item">
+                <span class="label">BUILT BY</span>
+                <p class="gold-text">OLAMIDE</p>
+            </div>
+
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+            <div class="arc-reactor">
+                <div class="arc-outer"></div>
+                <div class="arc-inner"></div>
+                <div class="arc-core"></div>
+            </div>
+            <div class="footer-sign">
+                <p class="fs-quote">"I love you 3000."</p>
+                <p class="fs-copy">© 2025 OLAMIDE // ALL RIGHTS RESERVED. POWERED BY AN ARC REACTOR.</p>
             </div>
         </div>
     </footer>
