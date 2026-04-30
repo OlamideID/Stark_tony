@@ -8,22 +8,44 @@ const ctx2 = canvas2.getContext('2d');
 const images1 = [];
 const images2 = [];
 
+let loadedCount = 0;
+const totalToLoad = totalFrames * 2; // Loading for 2 sections
+
 function resize() {
     canvas1.width = canvas2.width = window.innerWidth;
     canvas1.height = canvas2.height = window.innerHeight;
 }
 
 function preload() {
+    const progressFill = document.getElementById('progress-fill');
+
     for (let i = 1; i <= totalFrames; i++) {
         const frame = i.toString().padStart(4, '0');
 
+        // Frame set 1
         const img1 = new Image();
         img1.src = `./frames/frame_${frame}.jpg`;
+        img1.onload = () => handleLoad();
+        img1.onerror = () => handleLoad(); // Don't get stuck on missing files
         images1.push(img1);
 
+        // Frame set 2
         const img2 = new Image();
         img2.src = `./frames2/frame_${frame}.jpg`;
+        img2.onload = () => handleLoad();
+        img2.onerror = () => handleLoad();
         images2.push(img2);
+    }
+
+    function handleLoad() {
+        loadedCount++;
+        const percent = (loadedCount / totalToLoad) * 100;
+        progressFill.style.width = `${percent}%`;
+
+        if (loadedCount >= totalToLoad) {
+            document.getElementById('loading-screen').classList.add('fade-out');
+            handleScroll(); // Initial draw
+        }
     }
 }
 
