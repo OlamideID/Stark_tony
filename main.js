@@ -1,9 +1,3 @@
-/* ============================================
-   STARK OS — OLAMIDE
-   main.js — Canvas scroll, quote switching,
-   frame counter, progress bars
-   ============================================ */
-
 const totalFrames = 169;
 
 const canvas1 = document.getElementById('canvas-1');
@@ -17,13 +11,11 @@ const images2 = [];
 let loadedCount = 0;
 const totalToLoad = totalFrames * 2;
 
-// ---- RESIZE ----
 function resize() {
     canvas1.width = canvas2.width = window.innerWidth;
     canvas1.height = canvas2.height = window.innerHeight;
 }
 
-// ---- PRELOAD ----
 function preload() {
     const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
@@ -61,7 +53,6 @@ function preload() {
     }
 }
 
-// ---- DRAW IMAGE COVER ----
 function drawImageCover(ctx, img, canvas) {
     if (!img || !img.complete || !img.naturalWidth) return;
     const hRatio = canvas.width / img.naturalWidth;
@@ -74,7 +65,6 @@ function drawImageCover(ctx, img, canvas) {
         cx, cy, img.naturalWidth * ratio, img.naturalHeight * ratio);
 }
 
-// ---- UPDATE QUOTES ----
 function updateQuotes(containerId, currentFrame) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -90,7 +80,6 @@ function updateQuotes(containerId, currentFrame) {
     });
 }
 
-// ---- UPDATE FRAME COUNTER ----
 function updateFrameCounter(numElId, frameIndex) {
     const el = document.getElementById(numElId);
     if (el) {
@@ -98,7 +87,6 @@ function updateFrameCounter(numElId, frameIndex) {
     }
 }
 
-// ---- UPDATE SECTION PROGRESS BAR ----
 function updateSectionProgress(fillId, percentId, progress) {
     const fill = document.getElementById(fillId);
     const pct = document.getElementById(percentId);
@@ -107,7 +95,6 @@ function updateSectionProgress(fillId, percentId, progress) {
     if (pct) pct.textContent = `${p}%`;
 }
 
-// ---- SECTION 2: SHOW/HIDE FIXED OVERLAY + SWAP TEXT AT FRAME 90 ----
 let stateB_active = false;
 const overlayRight = document.getElementById('overlay-right');
 const stateA = document.getElementById('state-a');
@@ -116,14 +103,12 @@ const stateB = document.getElementById('state-b');
 function updateSection2State(frameIndex, section2InView) {
     if (!overlayRight || !stateA || !stateB) return;
 
-    // Show/hide entire overlay based on whether section 2 is in viewport
     if (section2InView) {
         overlayRight.classList.add('visible');
     } else {
         overlayRight.classList.remove('visible');
     }
 
-    // Swap states at frame 90 (index 89)
     if (frameIndex >= 89 && !stateB_active) {
         stateB_active = true;
         stateA.classList.add('hidden');
@@ -135,7 +120,6 @@ function updateSection2State(frameIndex, section2InView) {
     }
 }
 
-// ---- MAIN SCROLL HANDLER ----
 function handleScroll() {
     const sections = document.querySelectorAll('.scroll-section');
 
@@ -163,21 +147,20 @@ function handleScroll() {
             const inView = progress > 0 && progress < 1;
             const ql = document.getElementById('quotes-left-2');
             if (ql) ql.classList.toggle('visible', inView);
-            // Draw canvas
+
             if (images2[frameIndex]) drawImageCover(ctx2, images2[frameIndex], canvas2);
-            // Update counter
+
             updateFrameCounter('fc-num-2', frameIndex);
-            // Update quotes
+
             updateQuotes('quotes-left-2', frameIndex);
-            // Update progress bar
+
             updateSectionProgress('sp-fill-2', 'sp-percent-2', progress);
-            // Update right text based on frame + visibility
+
             updateSection2State(frameIndex, inView);
         }
     });
 }
 
-// ---- INIT ----
 window.addEventListener('resize', () => {
     resize();
     handleScroll();
