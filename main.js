@@ -1,3 +1,5 @@
+gsap.registerPlugin(ScrollTrigger);
+
 const totalFrames = 169;
 
 const canvas1 = document.getElementById('canvas-1');
@@ -26,28 +28,26 @@ function preload() {
 
         const img1 = new Image();
         img1.src = `./frames/frame_${frame}.jpg`;
-        img1.onload = () => handleLoad();
-        img1.onerror = () => handleLoad();
+        img1.onload = img1.onerror = handleLoad;
         images1.push(img1);
 
         const img2 = new Image();
         img2.src = `./frames2/frame_${frame}.jpg`;
-        img2.onload = () => handleLoad();
-        img2.onerror = () => handleLoad();
+        img2.onload = img2.onerror = handleLoad;
         images2.push(img2);
     }
 
     function handleLoad() {
         loadedCount++;
         const percent = Math.round((loadedCount / totalToLoad) * 100);
-        progressFill.style.width = `${percent}%`;
-        progressText.textContent = `${percent}%`;
+        if (progressFill) progressFill.style.width = `${percent}%`;
+        if (progressText) progressText.textContent = `${percent}%`;
         if (loadFramesEl) loadFramesEl.textContent = `FRAMES: ${loadedCount} / ${totalToLoad}`;
 
         if (loadedCount >= totalToLoad) {
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('fade-out');
-                handleScroll();
+                initScrollAnimations();
             }, 400);
         }
     }
@@ -68,23 +68,16 @@ function drawImageCover(ctx, img, canvas) {
 function updateQuotes(containerId, currentFrame) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    const items = container.querySelectorAll('.quote-item');
-    items.forEach(item => {
+    container.querySelectorAll('.quote-item').forEach(item => {
         const start = parseInt(item.getAttribute('data-frame-start'));
         const end = parseInt(item.getAttribute('data-frame-end'));
-        if (currentFrame >= start && currentFrame <= end) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
+        item.classList.toggle('active', currentFrame >= start && currentFrame <= end);
     });
 }
 
 function updateFrameCounter(numElId, frameIndex) {
     const el = document.getElementById(numElId);
-    if (el) {
-        el.textContent = String(frameIndex + 1).padStart(3, '0');
-    }
+    if (el) el.textContent = String(frameIndex + 1).padStart(3, '0');
 }
 
 function updateSectionProgress(fillId, percentId, progress) {
@@ -102,12 +95,7 @@ const stateB = document.getElementById('state-b');
 
 function updateSection2State(frameIndex, section2InView) {
     if (!overlayRight || !stateA || !stateB) return;
-
-    if (section2InView) {
-        overlayRight.classList.add('visible');
-    } else {
-        overlayRight.classList.remove('visible');
-    }
+    overlayRight.classList.toggle('visible', section2InView);
 
     if (frameIndex >= 89 && !stateB_active) {
         stateB_active = true;
@@ -120,53 +108,54 @@ function updateSection2State(frameIndex, section2InView) {
     }
 }
 
-function handleScroll() {
+function initScrollAnimations() {
     const sections = document.querySelectorAll('.scroll-section');
 
     sections.forEach((section, index) => {
-        const rect = section.getBoundingClientRect();
-        const sectionHeight = section.offsetHeight;
+        const proxy = { frame: 0, progress: 0 };
 
-        let progress = -rect.top / (sectionHeight - window.innerHeight);
-        progress = Math.max(0, Math.min(1, progress));
+        ScrollTrigger.create({
+            trigger: section,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1,
+            onUpdate(self) {
+                const progress = self.progress;
+                const frameIndex = Math.min(
+                    Math.floor(progress * (totalFrames - 1)),
+                    totalFrames - 1
+                );
 
-        const frameIndex = Math.min(
-            Math.floor(progress * (totalFrames - 1)),
-            totalFrames - 1
-        );
+                if (index === 0) {
+                    const inView = progress > 0 && progress < 1;
+                    const ql = document.getElementById('quotes-left-1');
+                    if (ql) ql.classList.toggle('visible', inView);
 
-        if (index === 0) {
-            const inView = progress > 0 && progress < 1;
-            const ql = document.getElementById('quotes-left-1');
-            if (ql) ql.classList.toggle('visible', inView);
-            if (images1[frameIndex]) drawImageCover(ctx1, images1[frameIndex], canvas1);
-            updateFrameCounter('fc-num-1', frameIndex);
-            updateQuotes('quotes-left-1', frameIndex);
-            updateSectionProgress('sp-fill-1', 'sp-percent-1', progress);
-        } else {
-            const inView = progress > 0 && progress < 1;
-            const ql = document.getElementById('quotes-left-2');
-            if (ql) ql.classList.toggle('visible', inView);
+                    if (images1[frameIndex]) drawImageCover(ctx1, images1[frameIndex], canvas1);
+                    updateFrameCounter('fc-num-1', frameIndex);
+                    updateQuotes('quotes-left-1', frameIndex);
+                    updateSectionProgress('sp-fill-1', 'sp-percent-1', progress);
 
-            if (images2[frameIndex]) drawImageCover(ctx2, images2[frameIndex], canvas2);
+                } else {
+                    const inView = progress > 0 && progress < 1;
+                    const ql = document.getElementById('quotes-left-2');
+                    if (ql) ql.classList.toggle('visible', inView);
 
-            updateFrameCounter('fc-num-2', frameIndex);
-
-            updateQuotes('quotes-left-2', frameIndex);
-
-            updateSectionProgress('sp-fill-2', 'sp-percent-2', progress);
-
-            updateSection2State(frameIndex, inView);
-        }
+                    if (images2[frameIndex]) drawImageCover(ctx2, images2[frameIndex], canvas2);
+                    updateFrameCounter('fc-num-2', frameIndex);
+                    updateQuotes('quotes-left-2', frameIndex);
+                    updateSectionProgress('sp-fill-2', 'sp-percent-2', progress);
+                    updateSection2State(frameIndex, inView);
+                }
+            }
+        });
     });
 }
 
 window.addEventListener('resize', () => {
     resize();
-    handleScroll();
+    ScrollTrigger.refresh();
 });
-
-window.addEventListener('scroll', () => requestAnimationFrame(handleScroll));
 
 resize();
 preload();
